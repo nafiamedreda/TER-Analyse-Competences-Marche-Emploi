@@ -6,10 +6,10 @@ Explorer le référentiel européen ESCO pour comprendre les métiers, les comp�
 
 ## Récupérer les données officielles
 
-Les données proviennent d'ESCO, la classification européenne des métiers et des compétences publiée par la Commission européenne.
+Les données utilisées proviennent d'**ESCO version 1.2.1**, la classification européenne des métiers et des compétences publiée par la Commission européenne, en **français (fr)** et au format **CSV**. L'archive d'origine est `ESCO dataset - v1.2.1 - classification - fr - csv.zip`. Elle est déjà conservée localement et n'a pas à être déplacée ni copiée dans le dépôt.
 
 1. Ouvrir la [page officielle de téléchargement ESCO](https://esco.ec.europa.eu/en/use-esco/download).
-2. Choisir une version du jeu de données, le contenu **classification**, la langue **français (fr)** et le format **CSV**.
+2. Sélectionner précisément la version **ESCO dataset - v1.2.1**, le contenu **classification**, la langue **français (fr)** et le format **CSV**.
 3. Ajouter le jeu au paquet à télécharger et suivre les instructions du portail : acceptation de la déclaration de confidentialité, saisie d'une adresse électronique et réception du lien de téléchargement.
 4. Extraire l'archive et copier les trois fichiers ci-dessous dans `data/raw/`, à la racine du dépôt, en conservant exactement leurs noms.
 
@@ -19,7 +19,7 @@ Les données proviennent d'ESCO, la classification européenne des métiers et d
 | `occupations_fr.csv` | Métiers : identifiants, intitulés français et dates de modification |
 | `occupationSkillRelations_fr.csv` | Relations entre métiers et compétences, essentielles ou optionnelles |
 
-La [documentation officielle des fichiers ESCO](https://esco.ec.europa.eu/en/structure-esco-downloadable-datasets) décrit leur organisation. La version exacte des fichiers utilisés n'est pas renseignée dans le notebook : les résultats ci-dessous correspondent aux données locales étudiées et peuvent varier avec une autre version. Conserver le nom de l'archive et sa version lors d'un nouveau téléchargement pour faciliter la reproduction.
+La [documentation officielle des fichiers ESCO](https://esco.ec.europa.eu/en/structure-esco-downloadable-datasets) décrit leur organisation. La [présentation officielle d'ESCO 1.2.1](https://esco.ec.europa.eu/en/about-esco/escopedia/escopedia/esco-v121) confirme la disponibilité de cette version dans la section de téléchargement. Les résultats ci-dessous correspondent aux données locales issues de cette archive et peuvent varier avec une autre version. Pour les reproduire, conserver la version **1.2.1** et les filtres indiqués ci-dessus.
 
 ```text
 data/

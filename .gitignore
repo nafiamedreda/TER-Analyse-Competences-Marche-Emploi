@@ -31,3 +31,9 @@ htmlcov/
 # Fichiers du système
 .DS_Store
 Thumbs.db
+
+# CSV locaux de l'exploration ESCO uniquement
+/data/raw/skills_fr.csv
+/data/raw/occupations_fr.csv
+/data/raw/occupationSkillRelations_fr.csv
+/data/processed/esco_metiers_competences_fr.csv

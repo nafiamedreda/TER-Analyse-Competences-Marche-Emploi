@@ -31,3 +31,8 @@ htmlcov/
 # Fichiers du système
 .DS_Store
 Thumbs.db
+
+# Nettoyage France Travail : tables INSEE (à télécharger) et sortie générée
+/data/raw/insee/
+/data/processed/offres_propres.csv
+/data/processed/offres_retirees.csv

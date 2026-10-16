@@ -19,6 +19,7 @@ data/
   processed/
     dictionnaire_donnees.md      # schéma de la base et règles de nettoyage
     offres_propres.csv           # généré par le script
+    offres_retirees.csv          # généré : offres retirées + motif
 src/
   france_travail/
     nettoyage.py
@@ -46,26 +47,40 @@ Le script retrouve ses fichiers à partir de son propre emplacement : il peut ê
 
 ## Ce que fait le script
 
-Les règles détaillées sont dans le dictionnaire de données. Dans l'ordre :
+Les règles détaillées et leur justification sont dans le dictionnaire de données. Dans l'ordre :
 
 1. **Lecture** du fichier d'offres (tout en texte, pour garder les codes comme `01001` ou `2A004`).
 2. **Typage** des dates et du booléen `alternance`.
-3. **Périmètre** : `type_contrat` devient « alternance » si `alternance` = vrai ; CDI et CDD sont gardés ; le reste est exclu (ex. intérim).
-4. **Géographie** : département (code) et région (nom) déduits du code commune.
-5. **Doublons exacts** : même `job_id` → on garde la version la plus récente (`date_actualisation`).
-6. **Offres incomplètes** : un champ obligatoire manquant → l'offre est supprimée.
-7. **Doublons probables** : même titre + entreprise + description → signalés dans `doublon_suspect`, non supprimés.
-8. **Écriture** de `data/processed/offres_propres.csv` et affichage d'un petit rapport qualité.
+3. **Offres incomplètes** : un champ obligatoire manquant → offre retirée. Fait avant le dédoublonnage pour ne jamais garder une version incomplète à la place d'une version complète.
+4. **Périmètre contrat** : `type_contrat` devient « alternance » si `alternance` = vrai ; CDI et CDD sont gardés ; le reste est retiré (ex. intérim).
+5. **Fenêtre d'un an** : seules les offres créées dans l'année précédant la date de référence sont gardées.
+6. **Géographie** : département (code) et région (nom) déduits du code commune.
+7. **Doublons exacts** : même `job_id` → on garde la version la plus récente (`date_actualisation`, ou `date_creation` si elle manque, puis `date_collecte`).
+8. **Doublons probables** : même titre + entreprise + description → signalés dans `doublon_suspect`, non supprimés.
+9. **Écriture** des offres propres, des offres retirées (avec leur motif) et affichage d'un rapport.
+
+## Où sont appliqués les filtres du périmètre
+
+| Filtre | Où | Détail |
+| --- | --- | --- |
+| Métiers Data/IA | **À la collecte (P1)**, par les codes ROME / mots-clés de la requête API | Contrôle de sécurité possible dans le nettoyage : remplir `CODES_ROME_PERIMETRE` dans `nettoyage.py` avec la liste validée. Vide pour l'instant = pas de filtre. |
+| Contrats CDI / CDD / alternance | **Nettoyage** (étape 4) | Peut aussi être restreint à la collecte. |
+| Fenêtre d'un an | **Nettoyage** (étape 5), sur `date_creation` | **Date de référence** = `date_collecte` la plus récente du fichier, ou une date fixe dans `DATE_REFERENCE`. Fenêtre = [référence − 1 an ; référence]. |
+
+L'API ne renvoie que les offres **actives** : pour couvrir une année complète, il faudra collecter régulièrement, puis appliquer la fenêtre sur l'ensemble des collectes.
 
 ## Résultat sur le fichier fictif
 
+Date de référence : 2026-10-15, fenêtre du 2025-10-15 au 2026-10-15.
+
 | Étape | Résultat |
 | --- | --- |
-| Offres lues | 12 |
-| Hors périmètre exclues | 1 (FT005, intérim) |
-| Doublons exacts retirés | 1 (FT002, version la plus ancienne) |
-| Incomplètes supprimées | 1 (FT011, titre manquant) |
-| **Offres finales** | **9** |
+| Offres lues | 16 |
+| Champ obligatoire manquant | 2 (FT011 : titre ; FT014 : date_collecte) |
+| Contrat hors périmètre | 1 (FT005, intérim) |
+| Hors fenêtre d'un an | 1 (FT013, créée en juin 2025) |
+| Doublons exacts | 2 (FT002 ; FT012 dont l'ancienne version n'a pas de date d'actualisation) |
+| **Offres finales** | **10** |
 | Doublons suspects | FT009, FT010 |
 
 Les cas particuliers de géographie sont vérifiés : Corse (`2A004` → 2A, Corse), outre-mer (`97411` → 974, La Réunion), commune manquante (département et région laissés vides).
@@ -74,4 +89,5 @@ Les cas particuliers de géographie sont vérifiés : Corse (`2A004` → 2A, Cor
 
 - Remplir la colonne « source API » du dictionnaire à partir d'une vraie réponse de l'API.
 - Ajouter la conversion du JSON de l'API vers le format du dictionnaire.
+- Remplir `CODES_ROME_PERIMETRE` avec la liste des métiers validée par l'équipe.
 - Lancer le script sur les vraies offres collectées.

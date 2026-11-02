@@ -2,40 +2,42 @@
 
 ## 1. Variables de l'offre
 
-| colonne            | type         | obligatoire | règle                                          | source API |
-|--------------------|--------------|-------------|------------------------------------------------|------------|
-| job_id             | texte        | oui         | unique (si doublon : garder le + récent)       |            |
-| date_creation      | date-heure   | oui         | format AAAA-MM-JJ HH:MM:SS                     |            |
-| titre              | texte        | oui         |                                                |            |
-| description        | texte        | oui         | conserver intégralement                        |            |
-| code_rome          | texte        | non         | lettre + 4 chiffres (ex. M1805)                |            |
-| intitule_rome      | texte        | non         |                                                |            |
-| entreprise         | texte        | non         | souvent absente (offres anonymes)              |            |
-| commune            | texte        | non         | code INSEE (ex. 75056)                         |            |
-| departement        | texte        | non         | code, déduit de la commune (ex. 75, 2A, 974)   |            |
-| region             | texte        | non         | nom, déduit de la commune (ex. Île-de-France)  |            |
-| type_contrat       | texte        | oui         | CDI, CDD, alternance (si alternance = vrai)    |            |
-| experience         | texte        | non         | valeurs : débutant, souhaitée, exigée          |            |
-| formation          | texte (JSON) | non         | plusieurs valeurs possibles                    |            |
-| competences        | texte (JSON) | non         | plusieurs valeurs possibles                    |            |
-| date_actualisation | date-heure   | non         | sert à garder le plus récent en cas de doublon |            |
-| alternance         | booléen      | non         | vrai / faux                                    |            |
-| salaire            | texte        | non         | texte brut, non transformé                     |            |
+| colonne            | type         | obligatoire | règle                                                                  | source API                                               |
+|--------------------|--------------|-------------|------------------------------------------------------------------------|----------------------------------------------------------|
+| job_id             | texte        | oui         | unique (si doublon : garder le + récent)                               | `id`                                                     |
+| date_creation      | date-heure   | oui         | format AAAA-MM-JJ HH:MM:SS (UTC)                                       | `dateCreation`                                           |
+| titre              | texte        | oui         |                                                                        | `intitule`                                               |
+| description        | texte        | oui         | conserver intégralement                                                | `description`                                            |
+| code_rome          | texte        | non         | lettre + 4 chiffres (ex. M1805)                                        | `romeCode`                                               |
+| intitule_rome      | texte        | non         |                                                                        | `romeLibelle`                                            |
+| entreprise         | texte        | non         | souvent absente (offres anonymes)                                      | `entreprise.nom`                                         |
+| commune            | texte        | non         | code INSEE (ex. 75056)                                                 | `lieuTravail.commune`                                    |
+| lieu_libelle       | texte        | non         | libellé du lieu (ex. 75 - Paris) ; sert si la commune manque           | `lieuTravail.libelle`                                    |
+| departement        | texte        | non         | code, déduit de la commune, sinon du libellé du lieu (ex. 75, 2A, 974) | dérivé de `lieuTravail.commune` ou `lieuTravail.libelle` |
+| region             | texte        | non         | nom, déduit de la commune ou du département (ex. Île-de-France)        | dérivé de `lieuTravail.commune` ou `lieuTravail.libelle` |
+| type_contrat       | texte        | oui         | CDI, CDD, alternance (si alternance = vrai)                            | `typeContrat` + `alternance`                             |
+| experience         | texte        | non         | débutant, exigée, souhaitée (absente de la collecte du 31/10)          | `experienceExige`                                        |
+| formation          | texte (JSON) | non         | plusieurs valeurs possibles                                            | `formations`                                             |
+| competences        | texte (JSON) | non         | plusieurs valeurs possibles                                            | `competences`                                            |
+| date_actualisation | date-heure   | non         | sert à garder le plus récent en cas de doublon                         | `dateActualisation`                                      |
+| alternance         | booléen      | non         | vrai / faux                                                            | `alternance`                                             |
+| salaire            | texte        | non         | texte brut, non transformé                                             | `salaire.libelle`                                        |
 
 
 ## 2. Métadonnées de collecte
 
-| colonne       | type       | obligatoire | règle                             | source API |
-|---------------|------------|-------------|-----------------------------------|------------|
-| date_collecte | date-heure | oui         | ajoutée par le script de collecte | —          |
-| source        | texte      | oui         | ex. « API France Travail v2 »     | —          |
+| colonne       | type       | obligatoire | règle                                                | source API                         |
+|---------------|------------|-------------|------------------------------------------------------|------------------------------------|
+| date_collecte | date-heure | oui         | date de la collecte, commune à tout le fichier (UTC) | `metadata.date_collecte`           |
+| source        | texte      | oui         | ex. « France Travail - API Offres d'emploi v2 »      | `metadata.source` + `metadata.api` |
 
 
-## 3. Colonne ajoutée par le nettoyage
+## 3. Colonnes ajoutées par le nettoyage
 
-| colonne         | type    | obligatoire | règle                                                            | source API |
-|-----------------|---------|-------------|------------------------------------------------------------------|------------|
-| doublon_suspect | booléen | oui         | vrai si même titre + entreprise + description qu'une autre offre | —          |
+| colonne           | type    | obligatoire | règle                                                                          | source API |
+|-------------------|---------|-------------|--------------------------------------------------------------------------------|------------|
+| doublon_suspect   | booléen | oui         | vrai si même titre + entreprise + description qu'une autre offre               | —          |
+| metier_a_verifier | booléen | oui         | vrai si le code ROME est hors du cœur du périmètre Data/IA (offre non retirée) | —          |
 
 
 ## 4. Règles générales
@@ -45,7 +47,8 @@
 - **Doublons exacts** : même `job_id` → on garde la version la plus récente. Date utilisée : `date_actualisation`, ou `date_creation` si elle manque ; à égalité, la `date_collecte` la plus récente.
 - **Doublons probables** : même titre + entreprise + description → on signale (`doublon_suspect`), on ne supprime pas.
 - **Contrat hors périmètre** : ni CDI, ni CDD, ni alternance → offre retirée.
-- **Métier hors périmètre** : le filtre principal est fait à la collecte (codes ROME du périmètre Data/IA). Le nettoyage peut refaire ce contrôle dès que la liste des codes ROME est validée.
+- **Stages** : un titre contenant « stage » ou « stagiaire » → offre retirée. L'API classe souvent les stages en CDI ou CDD : le type de contrat ne suffit pas à les repérer.
+- **Métier à vérifier** : la recherche par mots-clés de la collecte ramène des offres hors sujet. Un code ROME hors de la liste M1811, M1419, M1405, M1889, M1873, M1423 (à valider par l'équipe) → on signale (`metier_a_verifier`), on ne supprime pas.
 - **Fenêtre d'un an** : on garde les offres dont `date_creation` est comprise entre la date de référence moins un an et la date de référence. **Date de référence** : la `date_collecte` la plus récente du fichier (modifiable dans le script).
 - **Texte original** : la description brute n'est jamais modifiée.
 
@@ -68,6 +71,6 @@ Aucune offre n'est retirée en silence : chaque offre retirée est écrite dans 
 |-----------------------------------------|----------------------------|
 | champ obligatoire manquant : <colonnes> | champ obligatoire manquant |
 | contrat hors périmètre                  | contrat hors périmètre     |
-| métier hors périmètre                   | métier hors périmètre      |
+| stage hors périmètre                    | stages                     |
 | hors fenêtre d'un an                    | fenêtre d'un an            |
 | doublon exact (version plus ancienne)   | doublons exacts            |

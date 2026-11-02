@@ -49,9 +49,9 @@ python -m notebook exploration_esco.ipynb
 
 Sélectionner le noyau Python de cet environnement, puis exécuter toutes les cellules dans l'ordre, du début à la fin. Le répertoire de travail du noyau doit être `src/esco/` : la première cellule affiche le répertoire courant et son contenu. Les chemins `../../data/raw/...` et `../../data/processed/...` sont corrects depuis ce répertoire, mais pas depuis la racine du dépôt.
 
-Le dossier `data/processed/` doit exister avant l'exécution : le notebook ne le crée pas. Il est présent dans la structure du dépôt.
+Le notebook crée le dossier `data/processed/` si nécessaire avant l’export.
 
-La dernière cellule écrit `data/processed/esco_metiers_competences_fr.csv`, sans index et en encodage `utf-8-sig`. Une nouvelle exécution réécrit ce fichier final ; les trois CSV sources restent inchangés. Aucun téléchargement automatique n'est effectué par le notebook.
+La cellule d’export écrit `data/processed/esco_metiers_competences_fr.csv`, sans index et en encodage `utf-8-sig`. Une nouvelle exécution réécrit ce fichier final ; les trois CSV sources restent inchangés. Aucun téléchargement automatique n'est effectué par le notebook.
 
 ## Traitements et résultats vérifiés dans le notebook
 
@@ -64,3 +64,50 @@ La dernière cellule écrit `data/processed/esco_metiers_competences_fr.csv`, sa
 La table finale contient **126 051 lignes et 6 colonnes** : `occupationUri`, `metier`, `skillUri`, `competence`, `type_relation`, `type_competence`. Les effectifs de 3 039 métiers et 13 939 compétences décrivent les référentiels nettoyés.
 
 Cinq compétences numériques ont un type absent dans les sources ; elles sont conservées. Dans la table finale, cela concerne **59 relations** : les valeurs manquantes de `type_competence` sont remplacées par **« non renseigné »**, sans attribuer arbitrairement un type. Les manques observés dans `reuseLevel` ne sont pas imputés : cette colonne n'est pas retenue dans la table finale. Le contrôle final `df_esco.isna().sum()` indique **zéro valeur manquante dans les six colonnes**.
+
+
+## Modèle ESCO : entités et cardinalités
+
+Les métiers de `occupations_fr.csv` et les compétences/connaissances de `skills_fr.csv` sont identifiés par `conceptUri` dans leurs fichiers respectifs. Ces identifiants sont nommés `occupationUri` et `skillUri` dans `occupationSkillRelations_fr.csv` et dans la table consolidée. La table de relations matérialise chaque association entre un métier et une compétence.
+
+```text
+Métier (occupation) 1 — N Association métier-compétence N — 1 Compétence (skill)
+```
+
+Les deux relations 1—N représentent ensemble une relation **plusieurs-à-plusieurs** : un métier peut avoir plusieurs compétences et une compétence peut être associée à plusieurs métiers. Ce sont des cardinalités conceptuelles ; aucune contrainte de cardinalité minimale du modèle officiel n’est ici présentée comme vérifiée.
+
+Les effectifs observés sont distincts de ces cardinalités : les référentiels nettoyés contiennent **3 039 métiers** et **13 939 compétences/connaissances**. Les associations présentes dans les données concernent **3 039 métiers** et **13 475 compétences/connaissances** ; toutes les compétences du référentiel ne figurent donc pas dans cette table de relations.
+
+`type_relation` reprend `relationType` :
+
+| Catégorie observée | Signification selon le référentiel | Associations |
+| --- | --- | ---: |
+| `essential` | Compétence considérée comme essentielle pour ce métier | 67 600 |
+| `optional` | Compétence considérée comme optionnelle pour ce métier | 58 451 |
+
+Ces deux catégories couvrent les **126 051 relations**, sans valeur manquante.
+
+`type_competence` reprend `skillType` du fichier des relations : `knowledge` désigne une connaissance (**34 384 relations**) et `skill/competence` une compétence pratique (**91 608 relations**). Les **59 valeurs manquantes** ont été explicitement remplacées par **« non renseigné »**. Elles concernent cinq compétences numériques également sans type dans `skills_fr.csv` ; ce remplacement conserve les associations sans inventer de classification.
+
+## Validation pour la revue
+
+Une exécution complète a été réalisée avec **Python 3.14.6**, **pandas 3.0.3** et un **nouveau noyau `python3`**, depuis `src/esco/`, via `nbclient` (`allow_errors=False`). Les **39 cellules de code** ont été exécutées dans l’ordre, avec des compteurs continus de 1 à 39 et sans erreur. Les sorties de cette exécution sont enregistrées dans le notebook.
+
+| DataFrame | Lignes | Colonnes |
+| --- | ---: | ---: |
+| `df_skills` après dédoublonnage | 13 939 | 13 |
+| `df_occupations` après dédoublonnage | 3 039 | 15 |
+| `df_relations` | 126 051 | 6 |
+| `df_esco` | 126 051 | 6 |
+
+Le fichier `data/processed/esco_metiers_competences_fr.csv` a été exporté puis relu avec pandas. La cellule finale vérifie son existence, les six colonnes attendues dans leur ordre (`occupationUri`, `metier`, `skillUri`, `competence`, `type_relation`, `type_competence`), ses dimensions, puis l’égalité de **toutes les valeurs et de l’ordre des lignes** avec `df_esco` par `pd.testing.assert_frame_equal`. Aucune troncature n’a été observée. Chaque colonne contient **0 valeur manquante**. Les contrôles vérifient aussi la conservation du nombre de relations, les catégories, l’unicité des identifiants nettoyés et l’absence d’identifiants référencés inconnus.
+
+Les empreintes SHA-256 des trois CSV sources sont identiques avant et après l’exécution. Les quatre fichiers de données restent exclus de Git. Tous les chiffres de l’exploration précédente sont confirmés.
+
+Pour reproduire cette validation automatisée dans un environnement disposant des données et des dépendances (`pandas`, `matplotlib`, `nbformat`, `nbclient`, `ipykernel`), depuis la racine du dépôt :
+
+```powershell
+python -c "from pathlib import Path; import nbformat; from nbclient import NotebookClient; p=Path('src/esco/exploration_esco.ipynb'); n=nbformat.read(p, as_version=4); NotebookClient(n, kernel_name='python3', timeout=300, allow_errors=False, resources={'metadata': {'path': str(p.parent.resolve())}}).execute(); nbformat.write(n, p)"
+```
+
+Cette commande démarre un nouveau noyau et réexécute toutes les cellules ; la cellule finale interrompt l’exécution si les contrôles échouent. Le noyau `python3` doit correspondre à l’environnement contenant les dépendances.

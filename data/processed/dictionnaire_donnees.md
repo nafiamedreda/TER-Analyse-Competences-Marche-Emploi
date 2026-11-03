@@ -17,8 +17,8 @@
 | region             | texte        | non         | nom, déduit de la commune ou du département (ex. Île-de-France)        | dérivé de `lieuTravail.commune` ou `lieuTravail.libelle` |
 | type_contrat       | texte        | oui         | CDI, CDD, alternance (si alternance = vrai)                            | `typeContrat` + `alternance`                             |
 | experience         | texte        | non         | débutant, exigée, souhaitée (absente de la collecte du 31/10)          | `experienceExige`                                        |
-| formation          | texte (JSON) | non         | plusieurs valeurs possibles                                            | `formations`                                             |
-| competences        | texte (JSON) | non         | plusieurs valeurs possibles                                            | `competences`                                            |
+| formation          | texte (JSON) | non         | plusieurs valeurs ; tables séparées dans le MOD                        | `formations`                                             |
+| competences        | texte (JSON) | non         | plusieurs valeurs ; tables séparées dans le MOD                        | `competences`                                            |
 | date_actualisation | date-heure   | non         | sert à garder le plus récent en cas de doublon                         | `dateActualisation`                                      |
 | alternance         | booléen      | non         | vrai / faux                                                            | `alternance`                                             |
 | salaire            | texte        | non         | texte brut, non transformé                                             | `salaire.libelle`                                        |

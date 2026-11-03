@@ -19,6 +19,7 @@ data/
       v_region_2026.csv
   processed/
     dictionnaire_donnees.md                       # schéma de la base et règles de nettoyage
+    mcd_mod.md                                    # MCD / MOD et script SQL de la base relationnelle
     offres_propres.csv                            # généré par le script
     offres_retirees.csv                           # généré : offres retirées + motif
 src/

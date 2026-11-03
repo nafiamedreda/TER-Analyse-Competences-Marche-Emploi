@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1260 870" width="1260" height="870" font-family="Helvetica, Arial, sans-serif" font-size="14"><rect width="1260" height="870" fill="#ffffff"/>
+<line x1="640" y1="168" x2="640" y2="245" stroke="#333" stroke-width="1.4"/>
+<line x1="640" y1="168" x2="640" y2="99" stroke="#333" stroke-width="1.4"/>
+<line x1="640" y1="668" x2="640" y2="571" stroke="#333" stroke-width="1.4"/>
+<line x1="640" y1="668" x2="640" y2="745" stroke="#333" stroke-width="1.4"/>
+<line x1="375" y1="195" x2="500" y2="295" stroke="#333" stroke-width="1.4"/>
+<line x1="375" y1="195" x2="250" y2="167" stroke="#333" stroke-width="1.4"/>
+<line x1="375" y1="620" x2="500" y2="520" stroke="#333" stroke-width="1.4"/>
+<line x1="375" y1="620" x2="250" y2="649" stroke="#333" stroke-width="1.4"/>
+<line x1="900" y1="312" x2="780" y2="356" stroke="#333" stroke-width="1.4"/>
+<line x1="900" y1="312" x2="1020" y2="312" stroke="#333" stroke-width="1.4"/>
+<line x1="900" y1="522" x2="780" y2="469" stroke="#333" stroke-width="1.4"/>
+<line x1="900" y1="522" x2="1020" y2="522" stroke="#333" stroke-width="1.4"/>
+<line x1="1120" y1="425" x2="1120" y2="354" stroke="#333" stroke-width="1.4"/>
+<line x1="1120" y1="425" x2="1120" y2="480" stroke="#333" stroke-width="1.4"/>
+<line x1="1120" y1="650" x2="1120" y2="564" stroke="#333" stroke-width="1.4"/>
+<line x1="1120" y1="650" x2="1120" y2="735" stroke="#333" stroke-width="1.4"/>
+<rect x="500" y="245" width="280" height="326" fill="#f2f6fc" stroke="#222" stroke-width="1.5"/><rect x="500" y="245" width="280" height="30" fill="#dce7f7" stroke="#222" stroke-width="1.5"/><text x="640.0" y="265" text-anchor="middle" font-weight="bold">OFFRE</text>
+<text x="512" y="295" text-decoration="underline" font-weight="bold">job_id</text>
+<text x="512" y="317">titre</text>
+<text x="512" y="339">description</text>
+<text x="512" y="361">date_creation</text>
+<text x="512" y="383">date_actualisation</text>
+<text x="512" y="405">type_contrat</text>
+<text x="512" y="427">alternance</text>
+<text x="512" y="449">experience</text>
+<text x="512" y="471">salaire</text>
+<text x="512" y="493">entreprise</text>
+<text x="512" y="515">lieu_libelle</text>
+<text x="512" y="537">doublon_suspect</text>
+<text x="512" y="559">metier_a_verifier</text>
+<rect x="525" y="15" width="230" height="84" fill="#f2f6fc" stroke="#222" stroke-width="1.5"/><rect x="525" y="15" width="230" height="30" fill="#dce7f7" stroke="#222" stroke-width="1.5"/><text x="640.0" y="35" text-anchor="middle" font-weight="bold">METIER_ROME</text>
+<text x="537" y="65" text-decoration="underline" font-weight="bold">code_rome</text>
+<text x="537" y="87">intitule_rome</text>
+<rect x="525" y="745" width="230" height="106" fill="#f2f6fc" stroke="#222" stroke-width="1.5"/><rect x="525" y="745" width="230" height="30" fill="#dce7f7" stroke="#222" stroke-width="1.5"/><text x="640.0" y="765" text-anchor="middle" font-weight="bold">COLLECTE</text>
+<text x="537" y="795" text-decoration="underline" font-weight="bold">id_collecte</text>
+<text x="537" y="817">date_collecte</text>
+<text x="537" y="839">source</text>
+<rect x="40" y="90" width="210" height="106" fill="#f2f6fc" stroke="#222" stroke-width="1.5"/><rect x="40" y="90" width="210" height="30" fill="#dce7f7" stroke="#222" stroke-width="1.5"/><text x="145.0" y="110" text-anchor="middle" font-weight="bold">COMPETENCE</text>
+<text x="52" y="140" text-decoration="underline" font-weight="bold">id_competence</text>
+<text x="52" y="162">code_competence</text>
+<text x="52" y="184">libelle</text>
+<rect x="40" y="610" width="210" height="128" fill="#f2f6fc" stroke="#222" stroke-width="1.5"/><rect x="40" y="610" width="210" height="30" fill="#dce7f7" stroke="#222" stroke-width="1.5"/><text x="145.0" y="630" text-anchor="middle" font-weight="bold">FORMATION</text>
+<text x="52" y="660" text-decoration="underline" font-weight="bold">id_formation</text>
+<text x="52" y="682">code_formation</text>
+<text x="52" y="704">domaine</text>
+<text x="52" y="726">niveau</text>
+<rect x="1020" y="270" width="200" height="84" fill="#f2f6fc" stroke="#222" stroke-width="1.5"/><rect x="1020" y="270" width="200" height="30" fill="#dce7f7" stroke="#222" stroke-width="1.5"/><text x="1120.0" y="290" text-anchor="middle" font-weight="bold">COMMUNE</text>
+<text x="1032" y="320" text-decoration="underline" font-weight="bold">code_commune</text>
+<text x="1032" y="342">libelle</text>
+<rect x="1020" y="480" width="200" height="84" fill="#f2f6fc" stroke="#222" stroke-width="1.5"/><rect x="1020" y="480" width="200" height="30" fill="#dce7f7" stroke="#222" stroke-width="1.5"/><text x="1120.0" y="500" text-anchor="middle" font-weight="bold">DEPARTEMENT</text>
+<text x="1032" y="530" text-decoration="underline" font-weight="bold">code_departement</text>
+<text x="1032" y="552">libelle</text>
+<rect x="1020" y="735" width="200" height="84" fill="#f2f6fc" stroke="#222" stroke-width="1.5"/><rect x="1020" y="735" width="200" height="30" fill="#dce7f7" stroke="#222" stroke-width="1.5"/><text x="1120.0" y="755" text-anchor="middle" font-weight="bold">REGION</text>
+<text x="1032" y="785" text-decoration="underline" font-weight="bold">code_region</text>
+<text x="1032" y="807">nom</text>
+<ellipse cx="640" cy="168" rx="70" ry="26" fill="#fdf3e1" stroke="#222" stroke-width="1.5"/>
+<text x="640" y="173" text-anchor="middle" font-weight="bold" font-size="13">RELEVER_DE</text>
+<ellipse cx="640" cy="668" rx="75" ry="26" fill="#fdf3e1" stroke="#222" stroke-width="1.5"/>
+<text x="640" y="673" text-anchor="middle" font-weight="bold" font-size="13">PROVENIR_DE</text>
+<ellipse cx="375" cy="195" rx="68" ry="35" fill="#fdf3e1" stroke="#222" stroke-width="1.5"/>
+<text x="375" y="192" text-anchor="middle" font-weight="bold" font-size="13">DEMANDER</text>
+<text x="375" y="209" text-anchor="middle" font-size="13">exigence</text>
+<ellipse cx="375" cy="620" rx="68" ry="44" fill="#fdf3e1" stroke="#222" stroke-width="1.5"/>
+<text x="375" y="609" text-anchor="middle" font-weight="bold" font-size="13">EXIGER</text>
+<text x="375" y="626" text-anchor="middle" font-size="13">exigence</text>
+<text x="375" y="643" text-anchor="middle" font-size="13">commentaire</text>
+<ellipse cx="900" cy="312" rx="68" ry="26" fill="#fdf3e1" stroke="#222" stroke-width="1.5"/>
+<text x="900" y="317" text-anchor="middle" font-weight="bold" font-size="13">ETRE_DANS</text>
+<ellipse cx="900" cy="522" rx="68" ry="26" fill="#fdf3e1" stroke="#222" stroke-width="1.5"/>
+<text x="900" y="527" text-anchor="middle" font-weight="bold" font-size="13">LOCALISER</text>
+<ellipse cx="1120" cy="425" rx="92" ry="26" fill="#fdf3e1" stroke="#222" stroke-width="1.5"/>
+<text x="1120" y="430" text-anchor="middle" font-weight="bold" font-size="13">APPARTENIR_DEP</text>
+<ellipse cx="1120" cy="650" rx="92" ry="26" fill="#fdf3e1" stroke="#222" stroke-width="1.5"/>
+<text x="1120" y="655" text-anchor="middle" font-weight="bold" font-size="13">APPARTENIR_REG</text>
+<text x="670" y="230" text-anchor="middle" font-weight="bold" fill="#111" stroke="#fff" stroke-width="4" paint-order="stroke">(0,1)</text>
+<text x="670" y="124" text-anchor="middle" font-weight="bold" fill="#111" stroke="#fff" stroke-width="4" paint-order="stroke">(1,n)</text>
+<text x="670" y="596" text-anchor="middle" font-weight="bold" fill="#111" stroke="#fff" stroke-width="4" paint-order="stroke">(1,1)</text>
+<text x="670" y="730" text-anchor="middle" font-weight="bold" fill="#111" stroke="#fff" stroke-width="4" paint-order="stroke">(1,n)</text>
+<text x="467" y="257" text-anchor="middle" font-weight="bold" fill="#111" stroke="#fff" stroke-width="4" paint-order="stroke">(0,n)</text>
+<text x="291" y="164" text-anchor="middle" font-weight="bold" fill="#111" stroke="#fff" stroke-width="4" paint-order="stroke">(1,n)</text>
+<text x="467" y="534" text-anchor="middle" font-weight="bold" fill="#111" stroke="#fff" stroke-width="4" paint-order="stroke">(0,n)</text>
+<text x="291" y="628" text-anchor="middle" font-weight="bold" fill="#111" stroke="#fff" stroke-width="4" paint-order="stroke">(1,n)</text>
+<text x="819" y="330" text-anchor="middle" font-weight="bold" fill="#111" stroke="#fff" stroke-width="4" paint-order="stroke">(0,1)</text>
+<text x="978" y="300" text-anchor="middle" font-weight="bold" fill="#111" stroke="#fff" stroke-width="4" paint-order="stroke">(0,n)</text>
+<text x="818" y="474" text-anchor="middle" font-weight="bold" fill="#111" stroke="#fff" stroke-width="4" paint-order="stroke">(0,1)</text>
+<text x="978" y="510" text-anchor="middle" font-weight="bold" fill="#111" stroke="#fff" stroke-width="4" paint-order="stroke">(0,n)</text>
+<text x="1150" y="379" text-anchor="middle" font-weight="bold" fill="#111" stroke="#fff" stroke-width="4" paint-order="stroke">(1,1)</text>
+<text x="1150" y="466" text-anchor="middle" font-weight="bold" fill="#111" stroke="#fff" stroke-width="4" paint-order="stroke">(1,n)</text>
+<text x="1150" y="589" text-anchor="middle" font-weight="bold" fill="#111" stroke="#fff" stroke-width="4" paint-order="stroke">(1,1)</text>
+<text x="1150" y="720" text-anchor="middle" font-weight="bold" fill="#111" stroke="#fff" stroke-width="4" paint-order="stroke">(1,n)</text>
+</svg>

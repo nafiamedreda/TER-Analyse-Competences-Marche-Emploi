@@ -67,9 +67,11 @@ Nombre total d’occurrences collectées avant dédoublonnage : **664**
 
 Nombre d’offres uniques après suppression des doublons : **615**
 
-Le fichier brut final est :
+Le corpus public disponible dans le dépôt est :
 
-`data/raw/offres_france_travail_2026-10-31_13-43.json`
+`data/raw/offres_france_travail_public_2026-10-31_13-43.json`
+
+Il conserve les 615 offres uniques et la structure de la collecte. Les champs `contact` et `agence` ont été supprimés récursivement par `src/france_travail/nettoyer_json_public.py` avant publication. Le JSON brut utilisé en entrée de ce script n'est pas inclus dans la version actuelle du dépôt.
 
 ## 6. Structure du fichier JSON
 
@@ -89,6 +91,12 @@ Un deuxième script :
 `src/france_travail/verifier_collecte.py`
 
 a été utilisé pour contrôler la présence des principales variables nécessaires au projet.
+
+Pour vérifier le corpus public, lancer depuis la racine du dépôt :
+
+```bash
+python src/france_travail/verifier_collecte.py
+```
 
 Les principaux champs étudiés sont notamment :
 
@@ -126,7 +134,7 @@ Enfin, l’API France Travail expose principalement les offres encore disponible
 
 ## 9. Suite du travail
 
-Le corpus brut est transmis à la personne chargée de la préparation du dataset.
+Le corpus public est transmis à la personne chargée de la préparation du dataset. Son script doit lire `data/raw/offres_france_travail_public_2026-10-31_13-43.json`, en utilisant `offres_uniques` pour les offres dédoublonnées et `metadata` pour les informations de collecte. La suppression des champs de contact ne remplace pas le nettoyage métier du dataset.
 
 Les prochaines étapes sont notamment :
 

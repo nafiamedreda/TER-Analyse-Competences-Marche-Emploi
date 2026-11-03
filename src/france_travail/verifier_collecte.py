@@ -1,8 +1,8 @@
 import json
 
 
-# Fichier à vérifier
-FICHIER = "data/raw/offres_france_travail_2026-10-31_13-43.json"
+# Corpus public à vérifier (commande lancée depuis la racine du dépôt)
+FICHIER = "data/raw/offres_france_travail_public_2026-10-31_13-43.json"
 
 
 # Champs importants pour le TER

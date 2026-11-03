@@ -22,16 +22,16 @@ Le CSV est une table à plat : une ligne par offre, avec les formations et les c
 
 ### Associations et cardinalités
 
-| association    | côté A            | côté B            | attributs             | lecture                                                                           |
-|----------------|-------------------|-------------------|-----------------------|-----------------------------------------------------------------------------------|
-| RELEVER_DE     | OFFRE (0,1)       | METIER_ROME (1,n) |                       | une offre relève d'au plus un métier ROME                                         |
-| ETRE_DANS      | OFFRE (0,1)       | COMMUNE (0,n)     |                       | une offre est située dans au plus une commune                                     |
-| LOCALISER      | OFFRE (0,1)       | DEPARTEMENT (0,n) |                       | une offre est rattachée à au plus un département, même si sa commune est inconnue |
-| APPARTENIR_DEP | COMMUNE (1,1)     | DEPARTEMENT (1,n) |                       | une commune appartient à un seul département                                      |
-| APPARTENIR_REG | DEPARTEMENT (1,1) | REGION (1,n)      |                       | un département appartient à une seule région                                      |
-| DEMANDER       | OFFRE (0,n)       | COMPETENCE (1,n)  | exigence              | une offre peut demander plusieurs compétences, exigées (E) ou souhaitées (S)      |
-| EXIGER         | OFFRE (0,n)       | FORMATION (1,n)   | exigence, commentaire | une offre peut indiquer plusieurs formations                                      |
-| PROVENIR_DE    | OFFRE (1,1)       | COLLECTE (1,n)    |                       | une offre provient d'une collecte ; une collecte ramène plusieurs offres          |
+| association    | côté A            | côté B            | lecture                                                                           |
+|----------------|-------------------|-------------------|-----------------------------------------------------------------------------------|
+| RELEVER_DE     | OFFRE (0,1)       | METIER_ROME (1,n) | une offre relève d'au plus un métier ROME                                         |
+| ETRE_DANS      | OFFRE (0,1)       | COMMUNE (0,n)     | une offre est située dans au plus une commune                                     |
+| LOCALISER      | OFFRE (0,1)       | DEPARTEMENT (0,n) | une offre est rattachée à au plus un département, même si sa commune est inconnue |
+| APPARTENIR_DEP | COMMUNE (1,1)     | DEPARTEMENT (1,n) | une commune appartient à un seul département                                      |
+| APPARTENIR_REG | DEPARTEMENT (1,1) | REGION (1,n)      | un département appartient à une seule région                                      |
+| DEMANDER       | OFFRE (0,n)       | COMPETENCE (1,n)  | une offre peut demander plusieurs compétences                                     |
+| EXIGER         | OFFRE (0,n)       | FORMATION (1,n)   | une offre peut indiquer plusieurs formations                                      |
+| PROVENIR_DE    | OFFRE (1,1)       | COLLECTE (1,n)    | une offre provient d'une collecte ; une collecte ramène plusieurs offres          |
 
 ### Schéma
 
@@ -42,7 +42,6 @@ Le CSV est une table à plat : une ligne par offre, avec les formations et les c
 - **Entreprise** reste un attribut de OFFRE : l'API ne donne qu'un nom, absent de 200 offres, sans identifiant fiable.
 - **Département relié directement à l'offre** : 42 offres ont un département sans commune connue (ex. « 75 - Paris »). Passer uniquement par la commune ferait perdre cette information.
 - **Région** : elle se retrouve par le département et n'est pas stockée dans OFFRE. Les 18 offres indiquant seulement une région ou un pays étranger gardent cette information dans `lieu_libelle`.
-- **Exigence sur l'association** : une même compétence peut être exigée dans une offre et seulement souhaitée dans une autre.
 - **Compétence** : 88 mentions de compétences n'ont pas de code dans l'API, donc l'identifiant est créé par la base et le libellé est unique.
 - **Une seule version par offre** : la base garde la version la plus récente, conformément au nettoyage. Suivre une offre sur plusieurs collectes demanderait une association plusieurs-à-plusieurs entre OFFRE et COLLECTE.
 - **Hors du modèle pour l'instant** : les offres retirées, tracées dans `offres_retirees.csv`, et l'alignement avec ESCO (phase 4).
@@ -59,9 +58,9 @@ Clé primaire <ins>soulignée</ins>, clé étrangère précédée de `#`. Une cl
 - COLLECTE (<ins>id_collecte</ins>, date_collecte, source)
 - OFFRE (<ins>job_id</ins>, titre, description, date_creation, date_actualisation, type_contrat, alternance, experience, salaire, entreprise, lieu_libelle, doublon_suspect, metier_a_verifier, #code_rome, #code_commune, #code_departement, #id_collecte)
 - COMPETENCE (<ins>id_competence</ins>, code_competence, libelle)
-- OFFRE_COMPETENCE (<ins>#job_id</ins>, <ins>#id_competence</ins>, exigence)
+- OFFRE_COMPETENCE (<ins>#job_id</ins>, <ins>#id_competence</ins>)
 - FORMATION (<ins>id_formation</ins>, code_formation, domaine, niveau)
-- OFFRE_FORMATION (<ins>#job_id</ins>, <ins>#id_formation</ins>, exigence, commentaire)
+- OFFRE_FORMATION (<ins>#job_id</ins>, <ins>#id_formation</ins>)
 
 Remplissage des tables de référence :
 
@@ -129,7 +128,6 @@ CREATE TABLE competence (
 CREATE TABLE offre_competence (
     job_id            TEXT REFERENCES offre(job_id),
     id_competence     INTEGER REFERENCES competence(id_competence),
-    exigence          TEXT CHECK (exigence IN ('E', 'S')),
     PRIMARY KEY (job_id, id_competence)
 );
 
@@ -143,10 +141,10 @@ CREATE TABLE formation (
 CREATE TABLE offre_formation (
     job_id            TEXT REFERENCES offre(job_id),
     id_formation      INTEGER REFERENCES formation(id_formation),
-    exigence          TEXT CHECK (exigence IN ('E', 'S')),
-    commentaire       TEXT,
     PRIMARY KEY (job_id, id_formation)
 );
 ```
 
 Les contraintes `NOT NULL` correspondent aux colonnes obligatoires du dictionnaire, et les contraintes `CHECK` à leurs valeurs autorisées.
+
+Le niveau d'exigence et le commentaire des compétences et des formations ne sont pas repris dans cette base : ils restent dans le texte JSON de `offres_propres.csv`.

@@ -58,13 +58,10 @@
 <text x="640" y="173" text-anchor="middle" font-weight="bold" font-size="13">RELEVER_DE</text>
 <ellipse cx="640" cy="668" rx="75" ry="26" fill="#fdf3e1" stroke="#222" stroke-width="1.5"/>
 <text x="640" y="673" text-anchor="middle" font-weight="bold" font-size="13">PROVENIR_DE</text>
-<ellipse cx="375" cy="195" rx="68" ry="35" fill="#fdf3e1" stroke="#222" stroke-width="1.5"/>
-<text x="375" y="192" text-anchor="middle" font-weight="bold" font-size="13">DEMANDER</text>
-<text x="375" y="209" text-anchor="middle" font-size="13">exigence</text>
-<ellipse cx="375" cy="620" rx="68" ry="44" fill="#fdf3e1" stroke="#222" stroke-width="1.5"/>
-<text x="375" y="609" text-anchor="middle" font-weight="bold" font-size="13">EXIGER</text>
-<text x="375" y="626" text-anchor="middle" font-size="13">exigence</text>
-<text x="375" y="643" text-anchor="middle" font-size="13">commentaire</text>
+<ellipse cx="375" cy="195" rx="68" ry="26" fill="#fdf3e1" stroke="#222" stroke-width="1.5"/>
+<text x="375" y="200" text-anchor="middle" font-weight="bold" font-size="13">DEMANDER</text>
+<ellipse cx="375" cy="620" rx="68" ry="26" fill="#fdf3e1" stroke="#222" stroke-width="1.5"/>
+<text x="375" y="625" text-anchor="middle" font-weight="bold" font-size="13">EXIGER</text>
 <ellipse cx="900" cy="312" rx="68" ry="26" fill="#fdf3e1" stroke="#222" stroke-width="1.5"/>
 <text x="900" y="317" text-anchor="middle" font-weight="bold" font-size="13">ETRE_DANS</text>
 <ellipse cx="900" cy="522" rx="68" ry="26" fill="#fdf3e1" stroke="#222" stroke-width="1.5"/>

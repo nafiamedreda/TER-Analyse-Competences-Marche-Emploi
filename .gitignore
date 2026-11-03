@@ -37,3 +37,4 @@ Thumbs.db
 /data/raw/occupations_fr.csv
 /data/raw/occupationSkillRelations_fr.csv
 /data/processed/esco_metiers_competences_fr.csv
+/data/processed/esco_dictionnaire_competences_fr.csv

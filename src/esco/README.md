@@ -111,3 +111,82 @@ python -c "from pathlib import Path; import nbformat; from nbclient import Noteb
 ```
 
 Cette commande démarre un nouveau noyau et réexécute toutes les cellules ; la cellule finale interrompt l’exécution si les contrôles échouent. Le noyau `python3` doit correspondre à l’environnement contenant les dépendances.
+
+## Dictionnaire complet des compétences
+
+`preparer_dictionnaire_esco.py` prépare une ligne par compétence ou connaissance
+à partir du référentiel complet **ESCO v1.2.1 français**, `data/raw/skills_fr.csv`.
+Il utilise également `data/processed/esco_metiers_competences_fr.csv` pour
+contrôler la correspondance avec les relations préparées par le notebook.
+Ces deux entrées locales doivent donc être présentes. Le script ne télécharge
+rien, ne modifie pas les entrées et ne réalise aucun alignement France Travail.
+
+Depuis la **racine du dépôt**, avec Python 3.10 ou supérieur, sans dépendance externe :
+
+```powershell
+python src/esco/preparer_dictionnaire_esco.py
+```
+
+La sortie est `data/processed/esco_dictionnaire_competences_fr.csv`, sans index,
+en UTF-8 avec BOM, triée par URI. Ce CSV généré est ignoré par une règle ciblée
+du `.gitignore` ; le script Python reste destiné au versionnement.
+
+Le script refuse d'écraser une sortie existante. Pour la régénérer, déplacer
+d'abord le CSV existant vers une sauvegarde, puis relancer la commande depuis
+la racine. Comparer les fichiers avant de supprimer la sauvegarde. Avec les
+mêmes entrées, la régénération a produit un fichier identique octet par octet.
+
+| Colonne | Source et traitement |
+| --- | --- |
+| `skillUri` | `conceptUri`, identifiant du concept ; une seule ligne par URI |
+| `competence` | `preferredLabel`, libellé français officiel conservé sans reformulation |
+| `type_competence` | `skillType` : `knowledge` ou `skill/competence` ; absence conservée vide |
+| `altLabels` | Synonymes officiels de `altLabels`, sous forme de liste JSON ; `[]` en l'absence de synonymes |
+
+Les synonymes sont séparés sur les sauts de ligne du champ source, jamais sur
+les virgules. Leur ordre et leurs libellés sont conservés, sans traduction,
+normalisation ni ajout. Les éventuelles répétitions sont comptées et conservées.
+Une cellule contenant `[]` n'est pas vide, mais signifie qu'aucun synonyme n'est fourni.
+
+### Doublons et anomalies
+
+Le script vérifie les colonnes nécessaires, les URI, les libellés principaux
+et la présence et la validité de chaque `modifiedDate` (date-heure avec fuseau).
+Pour les URI répétées, toutes les colonnes source sont comparées. Si les lignes
+diffèrent uniquement par la date, la plus récente est retenue. Les lignes
+strictement identiques peuvent également être dédupliquées. Tout conflit sur
+une autre colonne ou toute date absente/invalide bloque l'export et est signalé.
+Les libellés principaux identiques associés à des URI différentes ne sont pas fusionnés.
+
+### Contrôles et résultats obtenus
+
+Les tableaux sont affichés dans le terminal ; aucun rapport supplémentaire n'est créé.
+
+| Contrôle | Résultat sur les fichiers locaux v1.2.1 |
+| --- | ---: |
+| Lignes source / dates présentes et valides | 13 960 / 13 960 |
+| URI répétées / occurrences supplémentaires | 21 / 21 |
+| Conflits hors `modifiedDate` | 0 |
+| Concepts exportés / doublons d'URI en sortie | 13 939 / 0 |
+| URI ou libellés principaux absents | 0 |
+| Concepts `skill/competence` / `knowledge` | 10 715 / 3 219 |
+| Concepts sans type, conservés | 5 |
+| Concepts avec synonymes / sans synonymes | 1 928 / 12 011 |
+| Mentions de synonymes / listes avec répétitions | 6 616 / 0 |
+| Libellés principaux partagés par plusieurs URI | 4 |
+| Relations du consolidé contrôlées | 126 051 |
+| URI distinctes du consolidé retrouvées | 13 475 |
+| URI inconnues / écarts de libellé ou de type | 0 / 0 |
+| Concepts absents du consolidé, conservés dans le dictionnaire | 464 |
+
+Les cinq types manquants ne sont pas imputés. Pour la comparaison uniquement,
+le script tient compte de leur représentation par `non renseigné` dans le
+consolidé. Les quatre libellés partagés sont « biologie marine », « contrôler
+la qualité de vins », « distribuer des tracts » et « mélanger des produits
+alimentaires », chacun associé à deux URI distinctes.
+
+Après export, le script relit le CSV, vérifie les quatre colonnes et l'égalité
+de toutes les valeurs avec les données préparées, puis la validité des listes
+JSON. Les empreintes SHA-256 des deux entrées sont comparées avant et après.
+Une incohérence avec le consolidé bloque l'export. Les effectifs ci-dessus sont
+des résultats observés, pas des valeurs imposées au script pour une autre version.

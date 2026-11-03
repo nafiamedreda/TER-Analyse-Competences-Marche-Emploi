@@ -19,7 +19,7 @@ import pandas as pd
 
 # --- Chemins ---------------------------------------------------------------
 DOSSIER = Path(__file__).resolve().parents[2]
-FICHIER_ENTREE = DOSSIER / "data" / "raw" / "offres_france_travail_2026-10-31_13-43.json"
+FICHIER_ENTREE = DOSSIER / "data" / "raw" / "offres_france_travail_public_2026-10-31_13-43.json"
 FICHIER_SORTIE = DOSSIER / "data" / "processed" / "offres_propres.csv"
 FICHIER_RETIREES = DOSSIER / "data" / "processed" / "offres_retirees.csv"
 DOSSIER_INSEE = DOSSIER / "data" / "raw" / "insee"

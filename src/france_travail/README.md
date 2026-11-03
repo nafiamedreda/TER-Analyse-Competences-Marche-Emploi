@@ -11,7 +11,7 @@ Le script travaille sur le JSON produit par `collect_offres.py` (collecte du 31/
 ```text
 data/
   raw/
-    offres_france_travail_2026-10-31_13-43.json   # offres collectées (branche amina-france-travail)
+    offres_france_travail_public_2026-10-31_13-43.json   # offres collectées, sans contacts (branche amina-france-travail)
     offres_fictives.csv                           # offres de test, avec cas pièges
     insee/                                        # tables géographiques (à télécharger, voir ci-dessous)
       v_commune_2026.csv
@@ -32,7 +32,7 @@ Tant que la branche `amina-france-travail` n'est pas intégrée, le JSON n'est p
 
 ```bash
 git fetch origin
-git show "origin/amina-france-travail:data/raw/offres_france_travail_2026-10-31_13-43.json" > data/raw/offres_france_travail_2026-10-31_13-43.json
+git show "origin/amina-france-travail:data/raw/offres_france_travail_public_2026-10-31_13-43.json" > data/raw/offres_france_travail_public_2026-10-31_13-43.json
 ```
 
 ## Récupérer les tables INSEE
